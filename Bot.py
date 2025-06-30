@@ -36,5 +36,3 @@ async def on_ready():
     print(f'FINN API KEY: ' + colorama.Fore.CYAN + os.getenv("FINN_API") + colorama.STYLE.RESET_ALL)
 
 bot.run(TOKEN)
-#testjg
-gkjhkj
