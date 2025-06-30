@@ -44,9 +44,9 @@ async def on_message(message):
         async with aiohttp.ClientSession() as session:
             url = f'https://pump.fun/api/token/{ca}'
             async with session.get(url) as resp:
-                print(f"API Status: {resp.status}")
+                await message.channel.send(f"API Status: {resp.status}")
                 content = await resp.text()
-                print(f"API Response: {content}")
+                await message.channel.send(f"API Response: {content}")
                 if resp.status == 200:
                     data = await resp.json()
 
