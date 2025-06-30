@@ -23,14 +23,14 @@ async def fetch_stock_price(ticker):
                 high = data.get('high')
                 low= data.get('low')
                 prev_close = data.get('pc')
-                emoji = "🟢📈" if price_direction == "up" else "🔴📉"
+                emoji = "🟢" if price_direction == "up" else "🔴"
                 embedcolor = discord.Color.green() if price_direction == "up" else discord.Color.red()
                 price_direction = "up" if current >= prev_close else "down"
                 tradingview_url = f"https://www.tradingview.com/symbols/{ticker.upper()}/"
                 
                 ## API ERROR HANDLING
                 if currentprice is None or high is None:
-                    return f"❌ Sorry! We're experiencing Issues right now!"
+                    return f"❌ Sorry! We couldn't find data for {ticker}"
                     
                 # Calc Price Change
                 percent_change - ((current - prev_close) / prev_close) * 100
@@ -38,7 +38,7 @@ async def fetch_stock_price(ticker):
                 
                 embed = discord.Embed( 
                     title=f"{emoji} {ticker.upper()} Stock Info",
-                    description=f"{ticker.upper()} Current Price: **${currentprice.2f} 🔗 [View Chart]({tradingview_url})"
+                    description=f"{ticker.upper()} Current Price: **${currentprice.2f} 🔗 [View Chart]({tradingview_url})",
                     color = embed_color
                 )
                 embed.add_field(name="📊 Todays High", value=" **${high:.2f}", inline=False)
@@ -47,5 +47,4 @@ async def fetch_stock_price(ticker):
                 embed.set_footer(text="SnipingSociety | Stock Data via Finnhub")
                 return embed
             else:
-                @bot.event
-                print(f"❌ Finnhub API failed.")
+                return f"❌ Sorry! We're experiencing Issues right now!"

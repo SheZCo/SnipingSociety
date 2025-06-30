@@ -26,7 +26,7 @@ async def stockprice(ctx, ticker: str):
     if embed: 
         await ctx.send(embed)
     else:
-        await.ctx.send(f"❌ Sorry! We're experiencing Issues right now!")
+        await ctx.send(f"❌ Sorry! We're experiencing Issues right now!")
 
 
 
