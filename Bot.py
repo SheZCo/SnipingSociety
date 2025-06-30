@@ -1,8 +1,13 @@
 # SnipingSociety Pump Token Scanner Bot (Dexscreener Edition)
 
-import reqs_
-import main_utils
+from dotenv import load_dotenv
+from discord.ext import commands
 import stock_utils
+from main_utils import setup_commands
+import discord
+import aiohttp
+import re
+import os
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -19,9 +24,11 @@ async def stock(ctx, ticker: str):
     await ctx.send(message)
 
     
-    
-for cmd in [main_utils.purge, main_utils.send_help]:
-    bot.add_command(cmd)
+ 
+def setup_commands(bot):
+    bot.add_command(send_help)
+    bot.add_command(purge)
+    bot.add_command(ping)
 
 @bot.event
 async def on_ready():

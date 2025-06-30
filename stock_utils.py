@@ -1,4 +1,11 @@
-import reqs_
+from dotenv import load_dotenv
+from discord.ext import commands
+import stock_utils
+import main_utils
+import discord
+import aiohttp
+import re
+import os
 
 async def fetch_stock_price(ticker):
     url = f"https://query1.finance.yahoo.com/v7/finance/quote?symbols={ticker}"
