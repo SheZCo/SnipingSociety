@@ -36,7 +36,7 @@ async def on_message(message):
     found_token = re.search(token_name_pattern, message.content)
 
     if found_ca:
-    ca_raw = found_ca.group().lower()
+        ca_raw = found_ca.group().lower()
     if ca_raw.endswith("pump"):
         ca = ca_raw[:-4]
     else:
@@ -83,12 +83,6 @@ async def on_message(message):
                     await message.channel.send("❌ Could not fetch data for that CA.")
     except Exception as e:
         print(f"[🔥] API Error: {e}")
-        await message.channel.send("⚠️ API error occurred while fetching token info.")
-
-    elif found_token:
-        token = found_token.group()
-        await message.channel.send(f"🔍 Searching for token named **{token}**...")
-        # Placeholder: later we match token name to known CA via API (e.g. Pump.fun or Solana explorer)
 
     await bot.process_commands(message)  # important to keep command system working   
        
