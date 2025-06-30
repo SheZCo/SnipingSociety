@@ -15,7 +15,7 @@ bot = commands.Bot(command_prefix='.', intents=discord.Intents.all())
 bot.remove_command('help')
 
 try:
-    main_utils.setup_commands()
+    main_utils.setup_commands(bot)
 except Exception as e:
     print(f"{e}")
 
@@ -25,8 +25,7 @@ async def stock(ctx, ticker: str):
     message = await stock_utils.fetch_stock_price(ticker.upper())
     await ctx.send(message)
 
-    
- 
+
 
 
 @bot.event

@@ -10,7 +10,7 @@ bot = commands.Bot(command_prefix='.', intents=discord.Intents.all())
 
 
 
-def setup_commands():
+def setup_commands(bot):
     @bot.command(name="help")
     async def help(ctx, topic: str = None):
         if topic is None:
@@ -20,7 +20,7 @@ def setup_commands():
                 color=discord.Color.dark_purple()
             )
             embed.add_field(name="📈 .help stocks", value="Commands for sniping stocks/options.", inline=False)
-            embed.add_field(name="p💰 .help crypto", value="Crypto, sniping, flipping tools.", inline=False)
+            embed.add_field(name="💰 .help crypto", value="Crypto, sniping, flipping tools.", inline=False)
             embed.add_field(name="🌹 .ping", value="Check if the bot is online and ready.", inline=False)
             embed.add_field(name="🧹 .purge", value="Clear messages in a channel.", inline=False)
             embed.set_footer(text="SnipingSociety | Stay sharp, stay profitable ⚡")
