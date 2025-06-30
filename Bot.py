@@ -12,18 +12,16 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 
 # Bot prefix (so commands start with ! or . or whatever you choose)
 bot = commands.Bot(command_prefix='.', intents=discord.Intents.all())
-
-# Event: Bot is ready
-@bot.event
-async def on_ready():
-    print(f'🚀 SnipingSociety Bot is live as {bot.user.name}')
-    # On bot startup on terminal
-
 # Simple Ping Command
 @bot.command()
 async def ping(ctx):
     await ctx.send('🏹 Sniper Ready – Ping Confirmed')
-
+@bot.event
+async def on_ready():
+    print(f'🚀 SnipingSociety Bot is live as {bot.user.name}')
+    # On bot startup on terminal
+    
+    
 # Token Scanning Pumpfun Api implementation
 @bot.event
 async def on_message(message):
@@ -38,32 +36,52 @@ async def on_message(message):
     found_token = re.search(token_name_pattern, message.content)
 
     if found_ca:
-        ca = found_ca.group()
-        await message.channel.send(f"🔍 Fetching token info for `{ca}`...")
-        try:
-            async with aiohttp.ClientSession() as session:
-                url = f'https://pump.fun/api/token/{ca}'
-                async with session.get(url) as resp:
-                    if resp.status == 200:
-                        data = await resp.json()
+    # 🧼 Step 1: Normalize and clean contract address
+    ca_raw = found_ca.group().lower()
+    ca = ca_raw[:-4] if ca_raw.endswith("pump") else ca_raw
 
-                        name = data.get("name", "Unknown Token")
-                        supply = data.get("supply", 0)
-                        price = data.get("price", 0)
-                        mc = data.get("market_cap", 0)
-                        creator = data.get("creator", "N/A")
+    print(f"[📡] Contract Detected: {ca_raw} → Cleaned: {ca}")
+    await message.channel.send(f"🔍 Fetching token info for `{ca}`...")
 
-                        embed = discord.Embed(
-                            title=f"📈 Token Info: {name}",
-                            description=f"**Market Cap:** ${int(mc):,}\n**Price:** ${round(price, 6)}\n**Supply:** {int(supply):,}\n**Creator:** `{creator}`",
-                            color=discord.Color.green()
-                        )
-                        embed.set_footer(text="SnipingSociety Bot")
-                        await message.channel.send(embed=embed)
-                    else:
-                        await message.channel.send("❌ Could not fetch data for that CA.")
-        except Exception as apierror:
-            print(f"Api call error: {apierror}")
+    try:
+        async with aiohttp.ClientSession() as session:
+            url = f'https://pump.fun/api/token/{ca}'
+            print(f"[🌐] Querying Pump.fun API: {url}")
+            async with session.get(url) as resp:
+                status = resp.status
+                content = await resp.text()
+
+                print(f"[🔎] API Status: {status}")
+                print(f"[📬] API Response Preview: {content[:250]}...")
+
+                if status == 200:
+                    data = await resp.json()
+
+                    name = data.get("name", "Unknown")
+                    supply = data.get("supply", 0)
+                    price = data.get("price", 0)
+                    mc = data.get("market_cap", 0)
+                    creator = data.get("creator", "N/A")
+
+                    embed = discord.Embed(
+                        title=f"📈 Token Info: {name}",
+                        description=(
+                            f"**💰 Market Cap:** ${int(mc):,}\n"
+                            f"**🔢 Price:** ${round(price, 6)}\n"
+                            f"**🧬 Supply:** {int(supply):,}\n"
+                            f"**👨‍💻 Creator:** `{creator}`"
+                        ),
+                        color=discord.Color.green()
+                    )
+                    embed.set_footer(text="SnipingSociety Bot")
+                    await message.channel.send(embed=embed)
+                else:
+                    await message.channel.send("❌ Could not fetch data for that CA. Might not be live yet.")
+
+    except Exception as apierror:
+        print(f"[🔥] API Call Error: {apierror}")
+        await message.channel.send("⚠️ Error while contacting Pump.fun API. Check logs.")
+
     elif found_token:
         token = found_token.group()
         await message.channel.send(f"🔍 Searching for token named **{token}**...")
