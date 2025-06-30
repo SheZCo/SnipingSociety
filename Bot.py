@@ -32,7 +32,7 @@ async def Stockprice(ctx, ticker: str):
 
 @bot.event
 async def on_ready():
-    return colorama.fore.GREEN + f'🚀 SnipingSociety Bot is live as {bot.user.name}\n' + Style.RESET_ALL
-    return f'FINN API KEY: ' + colorama.Fore.CYAN + os.getenv("FINN_API") + colorama.STYLE.RESET_ALL
+    print(colorama.fore.GREEN + f'🚀 SnipingSociety Bot is live as {bot.user.name}\n' + Style.RESET_ALL)
+    print(f'FINN API KEY: ' + colorama.Fore.CYAN + os.getenv("FINN_API") + colorama.STYLE.RESET_ALL)
 
 bot.run(TOKEN)
