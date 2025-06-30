@@ -3,9 +3,12 @@ import discord
 from discord.ext import commands
 import re
 import aiohttp
+import os
+from dotenv import load_dotenv
 
 # Replace this with your actual token
-TOKEN = ''
+load_dotenv()
+TOKEN = os.getenv('DISCORD_TOKEN')
 
 # Bot prefix (so commands start with ! or . or whatever you choose)
 bot = commands.Bot(command_prefix='.', intents=discord.Intents.all())
@@ -41,6 +44,9 @@ async def on_message(message):
         async with aiohttp.ClientSession() as session:
             url = f'https://pump.fun/api/token/{ca}'
             async with session.get(url) as resp:
+                print(f"API Status: {resp.status}")
+                content = await resp.text()
+                print(f"API Response: {content}")
                 if resp.status == 200:
                     data = await resp.json()
 
