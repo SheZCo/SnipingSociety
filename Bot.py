@@ -40,31 +40,30 @@ async def on_message(message):
     if found_ca:
         ca = found_ca.group()
         await message.channel.send(f"🔍 Fetching token info for `{ca}`...")
-        
-        async with aiohttp.ClientSession() as session:
-            url = f'https://pump.fun/api/token/{ca}'
-            async with session.get(url) as resp:
-                await message.channel.send(f"API Status: {resp.status}")
-                content = await resp.text()
-                await message.channel.send(f"API Response: {content}")
-                if resp.status == 200:
-                    data = await resp.json()
+        try:
+            async with aiohttp.ClientSession() as session:
+                url = f'https://pump.fun/api/token/{ca}'
+                async with session.get(url) as resp:
+                    if resp.status == 200:
+                        data = await resp.json()
 
-                    name = data.get("name", "Unknown Token")
-                    supply = data.get("supply", 0)
-                    price = data.get("price", 0)
-                    mc = data.get("market_cap", 0)
-                    creator = data.get("creator", "N/A")
+                        name = data.get("name", "Unknown Token")
+                        supply = data.get("supply", 0)
+                        price = data.get("price", 0)
+                        mc = data.get("market_cap", 0)
+                        creator = data.get("creator", "N/A")
 
-                    embed = discord.Embed(
-                        title=f"📈 Token Info: {name}",
-                        description=f"**Market Cap:** ${int(mc):,}\n**Price:** ${round(price, 6)}\n**Supply:** {int(supply):,}\n**Creator:** `{creator}`",
-                        color=discord.Color.green()
-                    )
-                    embed.set_footer(text="SnipingSociety Bot")
-                    await message.channel.send(embed=embed)
-                else:
-                    await message.channel.send("❌ Could not fetch data for that CA.")
+                        embed = discord.Embed(
+                            title=f"📈 Token Info: {name}",
+                            description=f"**Market Cap:** ${int(mc):,}\n**Price:** ${round(price, 6)}\n**Supply:** {int(supply):,}\n**Creator:** `{creator}`",
+                            color=discord.Color.green()
+                        )
+                        embed.set_footer(text="SnipingSociety Bot")
+                        await message.channel.send(embed=embed)
+                    else:
+                        await message.channel.send("❌ Could not fetch data for that CA.")
+        except Exception as apierror:
+            print(f"Api call error: {apierror}")
     elif found_token:
         token = found_token.group()
         await message.channel.send(f"🔍 Searching for token named **{token}**...")
