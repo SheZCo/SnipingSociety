@@ -47,7 +47,7 @@ async def on_message(message):
 
     try:
         async with aiohttp.ClientSession() as session:
-            url = f'https://api.pumpfunapi.org/token/{ca}'
+            url = f'https://api.pumpfunapi.org/price/{ca}'
             print(f"[🐍] Raw CA: {ca_raw}")
             print(f"[🧼] Cleaned CA: {ca}")
             print(f"[🌐] Requesting: https://api.pumpfunapi.org/token/{ca}")
