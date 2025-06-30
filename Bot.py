@@ -11,14 +11,20 @@ import os
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-
 bot = commands.Bot(command_prefix='.', intents=discord.Intents.all())
+bot.remove_command('help')
+
+def setup_commands():
+    try:
+        bot.add_command(main_utils.help_menu)
+        bot.add_command(main_utils.ping)
+        bot.add_command(main_utils.purge)
+    except Exception as E:
+        print(f"{E}")
 try:
-    bot.add_command(main_utils.setup_commands(ping))
-    bot.add_command(main_utils.setup_commands(send_help))
-    bot.add_command(main_utils.setup_commands(purge))
-    except Exception as e:
-        print(f"failed to load {e}")
+    setup_commands()
+except Exception as S:
+        print(f"{S}")
 
 
 
