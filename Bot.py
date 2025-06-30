@@ -14,19 +14,10 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='.', intents=discord.Intents.all())
 bot.remove_command('help')
 
-def setup_commands():
-    try:
-        bot.add_command(main_utils.help_menu)
-        bot.add_command(main_utils.ping)
-        bot.add_command(main_utils.purge)
-    except Exception as E:
-        print(f"{E}")
 try:
-    setup_commands()
-except Exception as S:
-        print(f"{S}")
-
-
+    main_utils.setup_commands()
+except Exception as e:
+    print(f"{e}")
 
 
 @bot.command()
