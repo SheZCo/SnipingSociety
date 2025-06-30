@@ -13,7 +13,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 bot = commands.Bot(command_prefix='.', intents=discord.Intents.all())
-bot.remove_command('help')
+main_utils.setup_(bot) ## Help / Primary bot uses
 
 
 
@@ -25,10 +25,7 @@ async def stock(ctx, ticker: str):
 
     
  
-def setup_commands(bot):
-    bot.add_command(send_help)
-    bot.add_command(purge)
-    bot.add_command(ping)
+
 
 @bot.event
 async def on_ready():

@@ -1,7 +1,5 @@
 from dotenv import load_dotenv
 from discord.ext import commands
-import stock_utils
-import main_utils
 import discord
 import aiohttp
 import re
@@ -63,4 +61,11 @@ def setup_commands():
         deleted = await ctx.channel.purge(limit=amount + 1)
         confirm = await ctx.send(f"🧹 Purged {len(deleted)-1} messages!")
         await confirm.delete(delay=5)
-setup_commands()
+        
+
+def setup_(bot):
+    bot.add_command(ping)
+    bot.add_command(purge)
+    bot.add_command(send_help)
+    
+    
