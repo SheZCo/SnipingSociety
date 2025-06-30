@@ -36,51 +36,51 @@ async def on_message(message):
     found_token = re.search(token_name_pattern, message.content)
 
     if found_ca:
-    # 🧼 Step 1: Normalize and clean contract address
     ca_raw = found_ca.group().lower()
-    ca = ca_raw[:-4] if ca_raw.endswith("pump") else ca_raw
+    if ca_raw.endswith("pump"):
+        ca = ca_raw[:-4]
+    else:
+        ca = ca_raw
 
-    print(f"[📡] Contract Detected: {ca_raw} → Cleaned: {ca}")
+    print(f"[📡] CA Detected: {ca}")
     await message.channel.send(f"🔍 Fetching token info for `{ca}`...")
 
     try:
         async with aiohttp.ClientSession() as session:
-            url = f'https://pump.fun/api/token/{ca}'
-            print(f"[🌐] Querying Pump.fun API: {url}")
+            url = f'https://api.pumpfunapi.org/token/{ca}'
             async with session.get(url) as resp:
-                status = resp.status
+                print(f"[🌐] API Status: {resp.status}")
                 content = await resp.text()
+                print(f"[📬] API Response: {content[:300]}...")  # limit preview
 
-                print(f"[🔎] API Status: {status}")
-                print(f"[📬] API Response Preview: {content[:250]}...")
-
-                if status == 200:
+                if resp.status == 200:
                     data = await resp.json()
 
                     name = data.get("name", "Unknown")
-                    supply = data.get("supply", 0)
                     price = data.get("price", 0)
-                    mc = data.get("market_cap", 0)
+                    market_cap = data.get("marketCap", 0)
+                    supply = data.get("totalSupply", 0)
                     creator = data.get("creator", "N/A")
+                    rug_status = data.get("rugged", False)
 
                     embed = discord.Embed(
-                        title=f"📈 Token Info: {name}",
+                        title=f"📈 {name} – Token Info",
                         description=(
-                            f"**💰 Market Cap:** ${int(mc):,}\n"
-                            f"**🔢 Price:** ${round(price, 6)}\n"
+                            f"**💰 Market Cap:** ${int(market_cap):,}\n"
+                            f"**💎 Price:** ${round(price, 6)}\n"
                             f"**🧬 Supply:** {int(supply):,}\n"
-                            f"**👨‍💻 Creator:** `{creator}`"
+                            f"**👨‍💻 Creator:** `{creator}`\n"
+                            f"**🚨 Rugged:** {'Yes ❌' if rug_status else 'No ✅'}"
                         ),
-                        color=discord.Color.green()
+                        color=discord.Color.red() if rug_status else discord.Color.green()
                     )
-                    embed.set_footer(text="SnipingSociety Bot")
+                    embed.set_footer(text="SnipingSociety Bot | Live from PumpFunAPI.org")
                     await message.channel.send(embed=embed)
                 else:
-                    await message.channel.send("❌ Could not fetch data for that CA. Might not be live yet.")
-
-    except Exception as apierror:
-        print(f"[🔥] API Call Error: {apierror}")
-        await message.channel.send("⚠️ Error while contacting Pump.fun API. Check logs.")
+                    await message.channel.send("❌ Could not fetch data for that CA.")
+    except Exception as e:
+        print(f"[🔥] API Error: {e}")
+        await message.channel.send("⚠️ API error occurred while fetching token info.")
 
     elif found_token:
         token = found_token.group()
