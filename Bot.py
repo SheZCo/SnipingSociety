@@ -6,6 +6,7 @@ import stock_utils
 import main_utils
 import discord
 import aiohttp
+from colorama import init, Fore, Style
 import re
 import os
 
@@ -20,20 +21,20 @@ except Exception as e:
     print(f"{e}")
 
 
-@bot.command()
-async def stockprice(ctx, ticker: str):
-    embed = await stock_utils.fetch_stock_price(ticker.upper())
-    if embed: 
+@bot.command(name="stock")
+async def Stockprice(ctx, ticker: str):
+    SP = await stock_utils.fetch_stock_price(ticker.upper())
+    if SP: 
         await ctx.send(embed)
     else:
         await ctx.send(f"❌ Sorry! We're experiencing Issues right now!")
 
-
+do
 
 
 @bot.event
 async def on_ready():
-    print(f'🚀 SnipingSociety Bot is live as {bot.user.name}')
-    print(f'FINN API KEY: ',os.getenv("FINN_API"))
+    return colorama.fore.GREEN + f'🚀 SnipingSociety Bot is live as {bot.user.name}\n' + Style.RESET_ALL
+    return f'FINN API KEY: ' + colorama.Fore.CYAN + os.getenv("FINN_API") + colorama.STYLE.RESET_ALL
 
 bot.run(TOKEN)
