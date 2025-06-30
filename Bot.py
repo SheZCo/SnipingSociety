@@ -21,9 +21,12 @@ except Exception as e:
 
 
 @bot.command()
-async def stock(ctx, ticker: str):
-    message = await stock_utils.fetch_stock_price(ticker.upper())
-    await ctx.send(message)
+async def stockprice(ctx, ticker: str):
+    embed = await stock_utils.fetch_stock_price(ticker.upper())
+    if embed: 
+        await ctx.send(embed)
+    else:
+        await.ctx.send(f"❌ Sorry! We're experiencing Issues right now!")
 
 
 
@@ -31,5 +34,6 @@ async def stock(ctx, ticker: str):
 @bot.event
 async def on_ready():
     print(f'🚀 SnipingSociety Bot is live as {bot.user.name}')
+    print(f'FINN API KEY: ',os.getenv("FINN_API"))
 
 bot.run(TOKEN)

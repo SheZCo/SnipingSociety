@@ -67,4 +67,5 @@ def setup_commands(bot):
     ## PING PROMPT ? BOT UP
     @bot.command()
     async def ping(ctx):
-        await ctx.send('🌹 Sniper Ready – Ping Confirmed')
+        latency = bot.latency * 1000 # Convert to milliseconds
+        await ctx.send(f"🌹 Sniper Ready – Ping Confirmed '{latency:.2f}ms 🥀'")
