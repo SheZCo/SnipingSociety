@@ -62,10 +62,5 @@ def setup_commands():
         confirm = await ctx.send(f"🧹 Purged {len(deleted)-1} messages!")
         await confirm.delete(delay=5)
         
-
-def setup_(bot):
-    bot.add_command(ping)
-    bot.add_command(purge)
-    bot.add_command(send_help)
     
     

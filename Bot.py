@@ -3,7 +3,7 @@
 from dotenv import load_dotenv
 from discord.ext import commands
 import stock_utils
-from main_utils import setup_commands
+import main_utils
 import discord
 import aiohttp
 import re
@@ -13,7 +13,12 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 bot = commands.Bot(command_prefix='.', intents=discord.Intents.all())
-main_utils.setup_(bot) ## Help / Primary bot uses
+try:
+    bot.add_command(main_utils.setup_commands(ping))
+    bot.add_command(main_utils.setup_commands(send_help))
+    bot.add_command(main_utils.setup_commands(purge))
+    except Exception as e:
+        print(f"failed to load {e}")
 
 
 
