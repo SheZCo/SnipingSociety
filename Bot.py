@@ -48,6 +48,9 @@ async def on_message(message):
     try:
         async with aiohttp.ClientSession() as session:
             url = f'https://api.pumpfunapi.org/token/{ca}'
+            print(f"[🐍] Raw CA: {ca_raw}")
+            print(f"[🧼] Cleaned CA: {ca}")
+            print(f"[🌐] Requesting: https://api.pumpfunapi.org/token/{ca}")
             async with session.get(url) as resp:
                 print(f"[🌐] API Status: {resp.status}")
                 content = await resp.text()
