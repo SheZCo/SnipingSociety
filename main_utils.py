@@ -26,7 +26,7 @@ def setup_commands(bot):
             embed.set_footer(text="SnipingSociety | Stay sharp, stay profitable ⚡")
             await ctx.send(embed=embed)
 
-        elif topic.lower() == "stocks":
+        elif topic.lower() == "stocks" or "stock":
             embed = discord.Embed(
                 title="📈 Stock Sniping Commands",
                 description="Commands related to stocks, options, and market analysis.",
@@ -68,4 +68,4 @@ def setup_commands(bot):
     @bot.command()
     async def ping(ctx):
         latency = bot.latency * 1000 # Convert to milliseconds
-        await ctx.send(f"🌹 Sniper Ready – Ping Confirmed '{latency:.2f}ms 🥀'")
+        await ctx.send(f"🌹 Sniper Ready – Ping Confirmed {latency:.2f}ms 🥀")
