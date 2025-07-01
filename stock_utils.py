@@ -38,11 +38,11 @@ async def fetch_stock_price(ticker):
                 
                 embed = discord.Embed( 
                     title=f"{emoji} {ticker.upper()} Stock Info",
-                    description=f"{ticker.upper()} Current Price: **${currentprice:.2f} 🔗 [View Chart]({tradingview_url})",
+                    description=f"{ticker.upper()}: **${currentprice:.2f}** | 🔗[View Chart]({tradingview_url})",
                     color = embedcolor
                 )
-                embed.add_field(name="📊 Todays High", value=f"**${high:.2f}", inline=False)
-                embed.add_field(name="📉 Today's Low", value=f"**${low:.2f}", inline=False)
+                embed.add_field(name="📊 Todays High", value=f"**${high:.2f}**", inline=False)
+                embed.add_field(name="📉 Today's Low", value=f"**${low:.2f}**", inline=False)
                 embed.add_field(name="📈 Percent Change", value=f"**{percent_change:+.2f}%**", inline=False)
                 embed.set_footer(text="SnipingSociety | Stock Data via Finnhub")
                 return embed
