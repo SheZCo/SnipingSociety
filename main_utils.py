@@ -165,7 +165,7 @@ class MainUtils(commands.Cog):
             return
     
         category = aliases.get(category, category)
-        is_user_admin = any(role.name in ["Owner", "The Boys"] for role in ctx.author.roles)
+        is_user_admin = any(role.name in ['Owner', 'The Boys'] for role in ctx.author.roles)
 
         if is_user_admin and category in admin_help_map:
             data = admin_help_map[category]
