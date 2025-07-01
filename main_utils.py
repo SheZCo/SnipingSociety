@@ -110,7 +110,8 @@ class MainUtils(commands.Cog):
                 "commands": {
                     "🆕 start casino": "Create your casino account.",
                     "💰 balance": "View your coin balance.",
-                    "📊 casinoanalytics {user}": "Views a users casino time",
+                    "📊 casinolytics": "General casino analytics",
+                    "📊 casinostats {user}": "Show users casino stats",
                     "💲 addmoney {user} {amount}": "put money in someones pocket",
                     "📤 send {user} {amount}": "Send coins to another user.",
                     "🎰 slots {amount} [match]": "Spin the slots with optional match requirement.",
@@ -166,7 +167,6 @@ class MainUtils(commands.Cog):
             "admin": "admin",
             "fun": "casino",    # if you want fun to map to casino as well
         }
-
 
         # Category name w/ aliases
         category = aliases.get(category, category)
