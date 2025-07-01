@@ -68,7 +68,7 @@ def setup_commands(bot):
                 embed = discord.Embed(
                     title="🛰️ SnipingSociety Admin 😈",
                     description="Precision builds power. Watch everything.",
-                    color=discord.Color.Black()
+                    color=discord.Color(0x000000)
                 )
                 embed.add_field(name="⚽ .kick", value="Kick a user from the server.", inline=False)
                 embed.add_field(name="🛡️ .ban", value="Ban a user from the server.", inline=False)
