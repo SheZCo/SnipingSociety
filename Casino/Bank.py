@@ -6,38 +6,65 @@ import os
 BALANCE_FILE = "casino_balances.json"
 INITIAL_BALANCE = 1000
 
+def load_data():
+    """Load the balances and losses JSON data."""
+    if not os.path.isfile(BALANCE_FILE):
+        return {}
+    with open(BALANCE_FILE, "r") as f:
+        try:
+            return json.load(f)
+        except json.JSONDecodeError:
+            return {}
+        
+def save_data(data):
+    """Save the balances and losses JSON data."""
+    with open(BALANCE_FILE, "w") as f:
+        json.dump(data, f, indent=4)
+
+def get_user_data(user_id):
+    """Helper to get a user's data dictionary, with defaults."""
+    data = load_data()
+    user_str = str(user_id)
+    if user_str not in data:
+        data[user_str] = {"balance":0, "losses": 0}
+        save_data(data)
+    return data[user_str]
+
+def get_balance(user_id):
+    return get_user_data(user_id).get("balance", 0)
+
+def set_balance(user_id, amount):
+    data = load_data()
+    user_str = str(user_id)
+    if user_str not in data:
+        data[user_str] = {"balance": 0, "losses": 0}
+    else:
+        data[user_str]["balance"] = amount
+    save_data(data)
+
+def get_loss_count(user_id):
+    return get_user_data(user_id).get("losses", 0)
+
+def set_loss_count(user_id, count):
+    data = load_data()
+    user_str = str(user_id)
+    if user_id not in data:
+        data[user_str] = {"balance": 0, "losses": count}
+    else:
+        data[user_str]["losses"] = count
+    save_data(data)
+
+def has_account(user_id):
+    return str(user_id) in load_data()
+
 def has_roles(*role_names):
     async def predicate(ctx):
         user_roles = [role.name for role in ctx.author.roles]
         return any(role in user_roles for role in role_names)
     return commands.check(predicate)
 
-def is_admin():
-    admin_roles=['Owner', 'The Boys'] 
-    return has_roles(*admin_roles)
-
-def load_balances():
-    if not os.path.isfile(BALANCE_FILE):
-        return {}
-    with open(BALANCE_FILE, "r") as f:
-        return json.load(f)
-    
-def save_balances(balances):
-    with open(BALANCE_FILE, "w") as f:
-        json.dump(balances, f, indent=4)
-
-def get_balance(user_id):
-    balances = load_balances()
-    return balances.get(str(user_id), 0)
-
-def set_balance(user_id, amount):
-    balances = load_balances()
-    balances[str(user_id)] = amount
-    save_balances(balances)
-
-def has_account(user_id):
-    balances = load_balances()
-    return str(user_id) in balances
+def is_admin(): 
+    return has_roles('Owner', 'The Boys')
 
 class CasinoBalance(commands.Cog):
     def __init__(self, bot):
@@ -56,10 +83,10 @@ class CasinoBalance(commands.Cog):
                 return
             ##ELSE
             set_balance(user_id, INITIAL_BALANCE)
+            set_loss_count(user_id, 0)
             await ctx.send(f"🎉 {ctx.author.mention}, your casino account is ready! You received {INITIAL_BALANCE} coins.")
         else: 
             await ctx.send("❌ Unknown start option. Try `.start casino`")
-
     @commands.command()
     async def balance(self, ctx):
         if not has_account(ctx.author.id):
@@ -73,15 +100,14 @@ class CasinoBalance(commands.Cog):
         if amount <= 0:
             await ctx.send("❌ Amount must be positive.")
             return
-            
-        sender_bal = get_balance(ctx.author.id)
+        sender_id = ctx.author.id
+        receiver_id = member.id
+        sender_bal = get_balance(sender_id)
         if sender_bal < amount:
             await ctx.send(f"❌ You don’t have enough coins. Your balance is: {sender_bal}")
             return
-            
-        receiver_bal = get_balance(member.id)
-        set_balance(ctx.author.id, sender_bal - amount)
-        set_balance(member.id, receiver_bal + amount)
+        set_balance(sender_id, sender_bal - amount)
+        set_balance(receiver_id, get_balance(receiver_id) + amount)
         await ctx.send(f"✅ {ctx.author.mention} sent {amount} coins to {member.mention}.")
 
     @commands.command()
@@ -89,10 +115,8 @@ class CasinoBalance(commands.Cog):
     async def addmoney(self, ctx, member: discord.Member, amount: int):
         if amount <= 0:
             await ctx.send("❌ Amount must be positive.")
-            return
-            
-        bal = get_balance(member.id)
-        set_balance(member.id, bal + amount)
+            return  
+        set_balance(member.id, get_balance(member.id) + amount)
         await ctx.send(f"✅ Added {amount} coins to {member.mention}'s balance.")
 
 async def setup(bot):

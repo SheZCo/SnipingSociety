@@ -28,19 +28,14 @@ class MainUtils(commands.Cog):
     async def help(self, ctx, category: str = None, command: str = None):
         category = category.lower() if category else None
         command = command.lower() if command else None
-        if category is None:
-            embed = discord.Embed(
-                title="🛡️ SnipingSociety Bot Help",
-                description="Type `.help [category]` to view commands in that area.",
-                color=discord.Color.dark_purple()
-            )
-            embed.add_field(name="📈 .help stocks", value="Commands for sniping stocks/options.", inline=False)
-            embed.add_field(name="💰 .help crypto", value="Crypto, sniping, flipping tools.", inline=False)
-            embed.add_field(name="🎲 .help casino", value="Casino games & coin tracking.", inline=False)
-            embed.add_field(name="😈 .help admin", value="Bot admin & utility commands.", inline=False)
-            embed.set_footer(text="SnipingSociety | Stay sharp, stay profitable ⚡")
-            await ctx.send(embed=embed)
-            return
+        
+        
+        is_user_admin = False
+        admin_roles = ['Owner', 'The Boys']
+        user_roles = [role.name for role in ctx.author.roles]
+        colorb = discord.Color(0x000000)
+        if any(role in user_roles for role in admin_roles):
+            is_user_admin = True
         
         aliases = {
             "stock": "stocks",
@@ -52,7 +47,7 @@ class MainUtils(commands.Cog):
             "fun": "casino",    # if you want fun to map to casino as well
         }
 
-        help_map = {
+        base_help_map = {
             "stocks": {
                 "title": "📈 Stock Sniping Commands",
                 "desc": "Commands related to stocks, options, and market analysis.",
@@ -86,41 +81,97 @@ class MainUtils(commands.Cog):
                     "🪙 coinflip {amount}": "Flip for 2x or lose it all."
                 },
                 "footer": "🎲 SnipingSociety | Casino & Games | Play smart, win big! 🎰"
-            },
+            }
+        }
+        admin_help_map = {
             "admin": {
                 "title": "😈 SnipingSociety Admin Prompt 😈",
                 "desc": "Server management and alpha injection.",
-                "color": discord.Color(0x000000),
+                "color": colorb,
                 "commands": {
                     "⚽ kick @user reason": "Kick a user from the server.",
                     "🛡️ ban @user reason length": "Ban a user from the server.",
+                    "🎲 casinolytics Casino Dashboard": "Show casino analytics",
                     "🧠 injectalpha @user": "Upload sniper alpha into a user.",
-                    "👔 coffeebreak": "Take a coffebreak when things get too much",
+                    "👔 coffeebreak": "Take a coffeebreak when things get too much",
                     "🧹 sweep...": "Delete recent messages.",
                     "🌈 rainbow @user": "Rainbow spam for wins.",
                     "💨 purge [amount]": "Bulk delete messages.",
                 },
                 "footer": "⛓️ SnipingSociety | Powered by @Sleutime | Precision builds power. Watch everything. ⛓️"
+            },
+            "stocks": {
+                "title": "📈 Stock Sniping Commands",
+                "desc": "Commands related to stocks, options, and market analysis.",
+                "color": colorb,
+                "commands": {
+                    "🔎 stock [ticker]": "Get live stock data.",
+                    "📰 news [ticker]": "Recent news headlines.",
+                    "📊 chart [ticker]": "Snapshot chart of stock price."
+                },
+                "footer": "SnipingSociety | Stock Sniping Set"
+            },
+            "casino": {
+                "title": "🎲 Casino & Games 🍒",
+                "desc": "Test your luck or flex your bankroll.",
+                "color": colorb,
+                "commands": {
+                    "🆕 start casino": "Create your casino account.",
+                    "💰 balance": "View your coin balance.",
+                    "📤 send {user} {amount}": "Send coins to another user.",
+                    "🎰 slots {amount} [match]": "Spin the slots with optional match requirement.",
+                    "🪙 coinflip {amount}": "Flip for 2x or lose it all."
+                },
+                "footer": "🎲 SnipingSociety | Casino & Games | Play smart, win big! 🎰"
+            },
+            "crypto": {
+                "title": "💰 Crypto Sniper Commands",
+                "desc": "Catch pumpers, avoid rugs, and flip fast.",
+                "color": colorb,
+                "commands": {
+                    "🔫 snipe dex {ca}": "Fetch token info from Dexscreener.",
+                    "💎 trending": "Trending tokens and sniper plays (future)."
+                },
+                "footer": "SnipingSociety | Crypto Command Set"
+            },
+            "stocks": {
+                "title": "📈 Stock Sniping Commands",
+                "desc": "Commands related to stocks, options, and market analysis.",
+                "color": colorb,
+                "commands": {
+                    "🔎 stock [ticker]": "Get live stock data.",
+                    "📰 news [ticker]": "Recent news headlines.",
+                    "📊 chart [ticker]": "Snapshot chart of stock price."
+                },
+                "footer": "SnipingSociety | Stock Sniping Set"
             }
         }
+        current_map = admin_help_map if is_user_admin else base_help_map
 
-        if category in help_map:
-            data = help_map[category]
-            embed = discord.Embed(
-                title=data["title"],
-                description=data["desc"],
-                color=data["color"]
+        if category is None:
+            if is_user_admin:
+                embed = discord.Embed(
+                title="🛡️ SnipingSociety Admin Help",
+                description="Control panel for SnipingSociety | `.help [category]` for commands.",
+                color=colorb
+                )
+                embed.add_field(name="📈 .help stocks", value="Commands for sniping stocks/options.", inline=False)
+                embed.add_field(name="💰 .help crypto", value="Crypto, sniping, flipping tools.", inline=False)
+                embed.add_field(name="🎲 .help casino", value="Casino games & coin tracking.", inline=False)
+                embed.add_field(name="😈 .help admin", value="Bot admin & utility commands.", inline=False)
+                embed.set_footer(text="SnipingSociety Admin | Move smart. Win harder.")
+            else:
+                embed = discord.Embed(
+                title="🛡️ SnipingSociety Bot Help",
+                description="Type `.help [category]` to view commands in that area.",
+                color=discord.Color.dark_purple()
             )
+            embed.add_field(name="📈 .help stocks", value="Commands for sniping stocks/options.", inline=False)
+            embed.add_field(name="💰 .help crypto", value="Crypto, sniping, flipping tools.", inline=False)
+            embed.add_field(name="🎲 .help casino", value="Casino games & coin tracking.", inline=False)
+            embed.set_footer(text="SnipingSociety | Stay sharp, stay profitable ⚡")
+        await ctx.send(embed=embed)
 
-            for cmd, desc in data["commands"].items():
-                embed.add_field(name=f"{cmd}", value=desc, inline=False)
-
-            embed.set_footer(text=data.get("footer", "SnipingSociety | Stay sharp, stay profitable ⚡"))
-            await ctx.send(embed=embed)
-        else:
-             # Category not found, send a friendly message or fallback help
-            await ctx.send(f"❌ Unknown help category: `{category}`. Try `.help` to see available categories.")
-        
 ######### ADMIN SHIT ###########
 
     @commands.command(name="injectalpha")
@@ -241,6 +292,33 @@ class MainUtils(commands.Cog):
     async def rainbowerror(self, ctx,error):
         if isinstance(error, commands.CheckFailure):
             await ctx.send(f"🌈 Not FOR YOU 🌈")
+
+    @commands.command(name="casinolytics")
+    @is_admin()
+    async def casino_analytics(self, ctx):
+        """Show casino analytics dashboard for admins."""
+        data = Bank.load_data()
+        total_players = len(data)
+        if total_players == 0:
+            await ctx.send("⚠️ No casino accounts found.")
+            return
+        
+        total_coins = sum(user.get("balance", 0) for user in data.values())
+        total_losses = sum(user.get("losses", 0) for user in data.values())
+        avg_balance = total_coins / total_players if total_players else 0
+
+        embed = discord.Embed(
+            title="🎲 Casino Analytics Dashboard",
+            description=f"Admin overview of casino economy & player stats.",
+            color=discord.Color(0x000000)
+        )
+        embed.add_field(name="👥 Total Players", value=str(total_players), inline=True)
+        embed.add_field(name="💰 Total Coins in Circulation", value=f"{total_coins:,}", inline=True)
+        embed.add_field(name="📊 Average Player Balance", value=f"{avg_balance:,.2f}", inline=True)
+        embed.add_field(name="📉 Total Losses Recorded", value=str(total_losses), inline=True)
+        embed.set_footer(text="🎲 SnipingSociety | Casino Analytics")
+        await ctx.send(embed=embed)
+
 
 async def setup(bot):
     await bot.add_cog(MainUtils(bot))
