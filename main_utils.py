@@ -130,6 +130,33 @@ class MainUtils(commands.Cog):
             }
         }
 
+        
+
+        if category is None:
+            if is_user_admin:
+                embed = discord.Embed(
+                title="🛡️ SnipingSociety Admin Help",
+                description="Control panel for SnipingSociety | `.help [category]` for commands.",
+                color=colorb
+                )
+                embed.add_field(name="📈 .help stocks", value="Commands for sniping stocks/options.", inline=False)
+                embed.add_field(name="💰 .help crypto", value="Crypto, sniping, flipping tools.", inline=False)
+                embed.add_field(name="🎲 .help casino", value="Casino games & coin tracking.", inline=False)
+                embed.add_field(name="😈 .help admin", value="Bot admin & utility commands.", inline=False)
+                embed.set_footer(text="SnipingSociety Admin | Move smart. Win harder.")
+            else:
+                embed = discord.Embed(
+                title="🛡️ SnipingSociety Bot Help",
+                description="Type `.help [category]` to view commands in that area.",
+                color=discord.Color.dark_purple()
+                )
+                embed.add_field(name="📈 .help stocks", value="Commands for sniping stocks/options.", inline=False)
+                embed.add_field(name="💰 .help crypto", value="Crypto, sniping, flipping tools.", inline=False)
+                embed.add_field(name="🎲 .help casino", value="Casino games & coin tracking.", inline=False)
+                embed.set_footer(text="SnipingSociety | Stay sharp, stay profitable ⚡")
+            await ctx.send(embed=embed)
+            return
+        
         aliases = {
             "stock": "stocks",
             "stocks": "stocks",
@@ -159,32 +186,6 @@ class MainUtils(commands.Cog):
                 embed.add_field(name=cmd, value=desc, inline=False)
             embed.set_footer(text=data.get("footer", "SnipingSociety | Stay sharp, stay profitable ⚡"))
             await ctx.send(embed=embed)
-
-        if category is None:
-            if is_user_admin:
-                embed = discord.Embed(
-                title="🛡️ SnipingSociety Admin Help",
-                description="Control panel for SnipingSociety | `.help [category]` for commands.",
-                color=colorb
-                )
-                embed.add_field(name="📈 .help stocks", value="Commands for sniping stocks/options.", inline=False)
-                embed.add_field(name="💰 .help crypto", value="Crypto, sniping, flipping tools.", inline=False)
-                embed.add_field(name="🎲 .help casino", value="Casino games & coin tracking.", inline=False)
-                embed.add_field(name="😈 .help admin", value="Bot admin & utility commands.", inline=False)
-                embed.set_footer(text="SnipingSociety Admin | Move smart. Win harder.")
-            else:
-                embed = discord.Embed(
-                title="🛡️ SnipingSociety Bot Help",
-                description="Type `.help [category]` to view commands in that area.",
-                color=discord.Color.dark_purple()
-                )
-                embed.add_field(name="📈 .help stocks", value="Commands for sniping stocks/options.", inline=False)
-                embed.add_field(name="💰 .help crypto", value="Crypto, sniping, flipping tools.", inline=False)
-                embed.add_field(name="🎲 .help casino", value="Casino games & coin tracking.", inline=False)
-                embed.set_footer(text="SnipingSociety | Stay sharp, stay profitable ⚡")
-            await ctx.send(embed=embed)
-            return
-        
         
             
 
