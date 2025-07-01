@@ -29,11 +29,13 @@ async def Stockprice(ctx, ticker: str):
     else:
         await ctx.send(f"❌ Sorry! We're experiencing Issues right now!")
 
-print(f'🧠 Starting bot...')
 
+
+
+print(f'🧠 Starting bot...')
 @bot.event
 async def on_ready():
     print(f'🚀 SnipingSociety Bot is live as {bot.user.name}\n')
-    print(f'FINN API KEY: ' + os.getenv("FINN_API"))
+    print(f'STOCK FINN API KEY: ' + os.getenv("FINN_API"))
 
 bot.run(TOKEN)
