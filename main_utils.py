@@ -155,26 +155,27 @@ class MainUtils(commands.Cog):
                 title="🛡️ SnipingSociety Bot Help",
                 description="Type `.help [category]` to view commands in that area.",
                 color=discord.Color.dark_purple()
-            )
-            embed.add_field(name="📈 .help stocks", value="Commands for sniping stocks/options.", inline=False)
-            embed.add_field(name="💰 .help crypto", value="Crypto, sniping, flipping tools.", inline=False)
-            embed.add_field(name="🎲 .help casino", value="Casino games & coin tracking.", inline=False)
-            embed.set_footer(text="SnipingSociety | Stay sharp, stay profitable ⚡")
+                )
+                embed.add_field(name="📈 .help stocks", value="Commands for sniping stocks/options.", inline=False)
+                embed.add_field(name="💰 .help crypto", value="Crypto, sniping, flipping tools.", inline=False)
+                embed.add_field(name="🎲 .help casino", value="Casino games & coin tracking.", inline=False)
+                embed.set_footer(text="SnipingSociety | Stay sharp, stay profitable ⚡")
             await ctx.send(embed=embed)
             return
     
-            category = aliases.get(category, category)
-            if category in current_map:
-                data = current_map[category]
-                embed = discord.Embed(
-                    title=data["title"],
-                    description=data["desc"],
-                    color=data["color"]
-                )
-                for cmd, desc in data["commands"].items():
-                    embed.add_field(name=cmd, value=desc, inline=False)
-                embed.set_footer(text=data.get("footer", "SnipingSociety | Stay sharp, stay profitable ⚡"))
-                return
+        category = aliases.get(category, category)
+        if category in current_map:
+            data = current_map[category]
+            embed = discord.Embed(
+                title=data["title"],
+                description=data["desc"],
+                color=data["color"]
+            )
+            for cmd, desc in data["commands"].items():
+                embed.add_field(name=cmd, value=desc, inline=False)
+            embed.set_footer(text=data.get("footer", "SnipingSociety | Stay sharp, stay profitable ⚡"))
+            await ctx.send(embed=embed)
+            
 
 ######### ADMIN SHIT ###########
 
