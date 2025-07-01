@@ -24,8 +24,8 @@ except Exception as e:
 @bot.command(name="stock")
 async def Stockprice(ctx, ticker: str):
     SP = await stock_utils.fetch_stock_price(ticker.upper())
-    if SP: 
-        await ctx.send(SP)
+    if isinstance(SP, discord.embed): 
+        await ctx.send(embed=SP)
     else:
         await ctx.send(f"❌ Sorry! We're experiencing Issues right now!")
 

@@ -19,9 +19,10 @@ async def fetch_stock_price(ticker):
                 data = await response.json()
                 
                 currentprice = data.get('c')
-                high = data.get('high')
-                low= data.get('low')
+                high = data.get('h')
+                low= data.get('l')
                 prev_close = data.get('pc')
+                
                 price_direction = "up" if currentprice >= prev_close else "down"
                 embedcolor = discord.Color.green() if price_direction == "up" else discord.Color.red()
                 emoji = "🟢" if price_direction == "up" else "🔴"
@@ -32,17 +33,17 @@ async def fetch_stock_price(ticker):
                     return f"❌ Sorry! We couldn't find data for {ticker}"
                     
                 # Calc Price Change
-                percent_change - ((currentprice - prev_close) / prev_close) * 100
+                percent_change = ((currentprice - prev_close) / prev_close) * 100
                 ##################
                 
                 embed = discord.Embed( 
                     title=f"{emoji} {ticker.upper()} Stock Info",
                     description=f"{ticker.upper()} Current Price: **${currentprice:.2f} 🔗 [View Chart]({tradingview_url})",
-                    color = embed_color
+                    color = embedcolor
                 )
-                embed.add_field(name="📊 Todays High", value=" **${high:.2f}", inline=False)
-                embed.add_field(name="📉 Today's Low", value="**${low:.2f}", inline=False)
-                embed.add_field(name="📈 Percent Change", value="**{percent_change:+.2f}%**", inline=False)
+                embed.add_field(name="📊 Todays High", value=f"**${high:.2f}", inline=False)
+                embed.add_field(name="📉 Today's Low", value=f"**${low:.2f}", inline=False)
+                embed.add_field(name="📈 Percent Change", value=f"**{percent_change:+.2f}%**", inline=False)
                 embed.set_footer(text="SnipingSociety | Stock Data via Finnhub")
                 return embed
             else:
