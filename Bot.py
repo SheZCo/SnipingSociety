@@ -33,7 +33,7 @@ async def on_ready():
 
 async def main():
     try:
-        await bot.load_extension("main_utils")
+        await bot.load_extension("maint_utils.MainUtils")
         await bot.load_extension("Casino.Bank")
         await bot.load_extension("Casino.Games")
         await bot.load_extension("Casino.leaderboard")
