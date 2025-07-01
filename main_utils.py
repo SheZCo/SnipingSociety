@@ -70,7 +70,7 @@ def setup_commands(bot):
             if any(role in user_roles for role in admin_roles):
                 embed = discord.Embed(
                     title="😈 SnipingSociety Admin Prompt 😈",
-                    description="Precision builds power. Watch everything.",
+                    description=" ",
                     color=discord.Color(0x000000)
                 )
                 embed.add_field(name="⚽ .kick", value="Kick a user from the server.")
@@ -79,7 +79,7 @@ def setup_commands(bot):
                 embed.add_field(name="🧹 Sweep...", value="Cleans the mess, deletes last 10 messages, or use purge")
                 embed.add_field(name="🧠 Inject Alpha", value="Injects top-tier sniper wisdom directly into your brain.")
                 embed.add_field(name="👔 Coffee Break", value="Posts a chill gif and says youll be back")
-                embed.set_footer(text="⛓️ SnipingSociety | Powered by @Sleutime ⛓️")  
+                embed.set_footer(text="⛓️ SnipingSociety | Powered by @Sleutime ⛓️ Precision builds power. Watch everything.")  
                 await ctx.send(embed=embed)   
 
 
