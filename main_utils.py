@@ -113,7 +113,7 @@ class MainUtils(commands.Cog):
             )
 
             for cmd, desc in data["commands"].items():
-                embed.add_field(name=f"[cmd]", value=desc, inline=False)
+                embed.add_field(name=f".{cmd}", value=desc, inline=False)
 
             embed.set_footer(text=data.get("footer", "SnipingSociety | Stay sharp, stay profitable ⚡"))
             await ctx.send(embed=embed)
