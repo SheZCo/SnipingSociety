@@ -165,7 +165,12 @@ class MainUtils(commands.Cog):
             return
     
         category = aliases.get(category, category)
-        if category in current_map:
+        if is_user_admin and category in admin_help_map:
+            data = admin_help_map[category]
+        else:
+            data = base_help_map.get(category)
+
+        if data:
             data = current_map[category]
             embed = discord.Embed(
                 title=data["title"],
