@@ -137,7 +137,6 @@ class MainUtils(commands.Cog):
             },
             **base_help_map
         }
-        current_map = admin_help_map if is_user_admin else base_help_map
 
         if category is None:
             if is_user_admin:
@@ -163,14 +162,12 @@ class MainUtils(commands.Cog):
                 embed.set_footer(text="SnipingSociety | Stay sharp, stay profitable ⚡")
             await ctx.send(embed=embed)
             return
-    
+        
+        current_map = admin_help_map if is_user_admin else base_help_map
+        # Category name w/ aliases
         category = aliases.get(category, category)
-        is_user_admin = any(role.name in ['Owner', 'The Boys'] for role in ctx.author.roles)
 
-        if is_user_admin and category in admin_help_map:
-            data = admin_help_map[category]
-        else:
-            data = base_help_map.get(category)
+        data = current_map.get(category)
 
         if data:
             embed = discord.Embed(
