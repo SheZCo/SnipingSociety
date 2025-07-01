@@ -26,7 +26,7 @@ def setup_commands(bot):
             embed.set_footer(text="SnipingSociety | Stay sharp, stay profitable ⚡")
             await ctx.send(embed=embed)
 
-        elif topic.lower() == "stocks" or "stock":
+        elif topic.lower() == "stocks":
             embed = discord.Embed(
                 title="📈 Stock Sniping Commands",
                 description="Commands related to stocks, options, and market analysis.",
