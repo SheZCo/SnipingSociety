@@ -37,7 +37,7 @@ def set_balance(user_id, amount):
     data = load_data()
     user_str = str(user_id)
     if user_str not in data:
-        data[user_str] = {"balance": 0, "losses": 0, "wins": 0}
+        data[user_str] = {"balance": amount, "losses": 0, "wins": 0}
     else:
         data[user_str]["balance"] = amount
     save_data(data)
@@ -48,7 +48,7 @@ def get_loss_count(user_id):
 def set_loss_count(user_id, count):
     data = load_data()
     user_str = str(user_id)
-    if user_id not in data:
+    if user_str not in data:
         data[user_str] = {"balance": 0, "losses": count, "wins": 0}
     else:
         data[user_str]["losses"] = count
