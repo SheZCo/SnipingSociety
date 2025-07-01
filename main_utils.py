@@ -79,11 +79,11 @@ class MainUtils(commands.Cog):
                 "desc": "Test your luck or flex your bankroll.",
                 "color": discord.Color.gold(),
                 "commands": {
-                    "start casino": "Create your casino account.",
-                    "balance": "View your coin balance.",
-                    "send {user} {amount}": "Send coins to another user.",
-                    "slots {amount} [match]": "Spin the slots with optional match requirement.",
-                    "coinflip {amount}": "Flip for 2x or lose it all."
+                    "🆕 start casino": "Create your casino account.",
+                    "💰 balance": "View your coin balance.",
+                    "📤 send {user} {amount}": "Send coins to another user.",
+                    "🎰 slots {amount} [match]": "Spin the slots with optional match requirement.",
+                    "🪙 coinflip {amount}": "Flip for 2x or lose it all."
                 },
                 "footer": "🎲 SnipingSociety | Casino & Games | Play smart, win big! 🎰"
             },
