@@ -110,9 +110,9 @@ def setup_commands(bot):
             await ctx.send("🚫 You don’t have the clearance to inject alpha.")
 
 ###########################################
-    @bot.command(name="coffebreak")
+    @bot.command(name="coffeebreak")
     @is_admin()
-    async def coffebreak(ctx):
+    async def coffeebreak(ctx):
         coffee_quotes = [
             "☕ Taking a break from the rugs. Be back when liquidity looks safer.",
             "🧘‍♂️ Admin is meditating on the next 100x. Do not disturb.",
@@ -152,7 +152,7 @@ def setup_commands(bot):
         embed.set_footer(text=f"😈 SnipingSociety 📈 | {footing}")
         await ctx.send(embed=embed)
 
-    @coffebreak.error
+    @coffeebreak.error
     async def Coffee_error(ctx, error):
         if isinstance(error, commands.CkeckFailure):
             await ctx.send(f"🚫 You don't need any more coffee...")
