@@ -37,18 +37,10 @@ class MainUtils(commands.Cog):
         if any(role in user_roles for role in admin_roles):
             is_user_admin = True
         
-        aliases = {
-            "stock": "stocks",
-            "stocks": "stocks",
-            "crypto": "crypto",
-            "casino": "casino",
-            "games": "casino",  # games maps to casino help
-            "admin": "admin",
-            "fun": "casino",    # if you want fun to map to casino as well
-        }
+
 
         base_help_map = {
-            "stocks": {
+            "stocks": { 
                 "title": "📈 Stock Sniping Commands",
                 "desc": "Commands related to stocks, options, and market analysis.",
                 "color": discord.Color.blue(),
@@ -82,7 +74,7 @@ class MainUtils(commands.Cog):
                 },
                 "footer": "🎲 SnipingSociety | Casino & Games | Play smart, win big! 🎰"
             }
-        }
+        },
         admin_help_map = {
             "admin": {
                 "title": "😈 SnipingSociety Admin Prompt 😈",
@@ -118,11 +110,12 @@ class MainUtils(commands.Cog):
                 "commands": {
                     "🆕 start casino": "Create your casino account.",
                     "💰 balance": "View your coin balance.",
+                    "📊 casinoanalytics {user}": "Views a users casino time",
                     "💲 addmoney {user} {amount}": "put money in someones pocket",
                     "📤 send {user} {amount}": "Send coins to another user.",
                     "🎰 slots {amount} [match]": "Spin the slots with optional match requirement.",
                     "🪙 coinflip {amount}": "Flip for 2x or lose it all.",
-                },
+                 },
                 "footer": "🎲 SnipingSociety | Casino & Games | Play smart, win big! 🎰"
             },
             "crypto": {
@@ -134,12 +127,20 @@ class MainUtils(commands.Cog):
                     "💎 trending": "Trending tokens and sniper plays (future)."
                 },
                 "footer": "SnipingSociety | Crypto Command Set"
-            },
-            **base_help_map
+            }
+        }
+
+        aliases = {
+            "stock": "stocks",
+            "stocks": "stocks",
+            "crypto": "crypto",
+            "casino": "casino",
+            "games": "casino",  # games maps to casino help
+            "admin": "admin",
+            "fun": "casino",    # if you want fun to map to casino as well
         }
 
 
-        current_map = admin_help_map if is_user_admin else base_help_map
         # Category name w/ aliases
         category = aliases.get(category, category)
 
@@ -334,6 +335,26 @@ class MainUtils(commands.Cog):
         embed.add_field(name="📉 Total Losses Recorded", value=str(total_losses), inline=True)
         embed.add_field(name="🏅 Total Wins Recorded", value=str(total_wins), inline=True)  # <-- Added field for wins
         embed.set_footer(text="🎲 SnipingSociety | Casino Analytics")
+        await ctx.send(embed=embed)
+
+    @commands.command(name="casinostats")
+    @is_admin()
+    async def casino_stats(self, ctx, member: discord.Member):
+        user_id = member.id
+        if not Bank.has_account(user_id):
+            await ctx.send(f"❌ {member.mention} does not have a casino account.")
+            return
+        balance = Bank.get_balance(user_id)
+        wins = Bank.get_win_count(user_id)
+        losses = Bank.get_loss_count(user_id)
+        embed = discord.Embed(
+            title=f"🎲 Casino Stats: {member.display_name}",
+            color=discord.Color.gold()
+        )
+        embed.add_field(name="💰 Balance", value=f"{balance} coins", inline=True)
+        embed.add_field(name="🏆 Wins", value=str(wins), inline=True)
+        embed.add_field(name="📉 Losses", value=str(losses), inline=True)
+        embed.set_footer(text="SnipingSociety | Admin View")
         await ctx.send(embed=embed)
 
 
