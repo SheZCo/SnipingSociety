@@ -45,7 +45,7 @@ class CasinoGames(commands.Cog):
             # Count max matching emojis
             counts = {}
             for emoji in result:
-                counts(emoji) = counts.get(emoji, 0) + 1
+                counts[emoji] = counts.get(emoji, 0) + 1
             max_matches = max(counts.values())
 
             #Payout 
