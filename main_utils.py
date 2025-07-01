@@ -134,17 +134,7 @@ class MainUtils(commands.Cog):
                 },
                 "footer": "SnipingSociety | Crypto Command Set"
             },
-            "stocks": {
-                "title": "📈 Stock Sniping Commands",
-                "desc": "Commands related to stocks, options, and market analysis.",
-                "color": colorb,
-                "commands": {
-                    "🔎 stock [ticker]": "Get live stock data.",
-                    "📰 news [ticker]": "Recent news headlines.",
-                    "📊 chart [ticker]": "Snapshot chart of stock price."
-                },
-                "footer": "SnipingSociety | Stock Sniping Set"
-            }
+            **base_help_map
         }
         current_map = admin_help_map if is_user_admin else base_help_map
 
@@ -170,7 +160,21 @@ class MainUtils(commands.Cog):
             embed.add_field(name="💰 .help crypto", value="Crypto, sniping, flipping tools.", inline=False)
             embed.add_field(name="🎲 .help casino", value="Casino games & coin tracking.", inline=False)
             embed.set_footer(text="SnipingSociety | Stay sharp, stay profitable ⚡")
-        await ctx.send(embed=embed)
+            await ctx.send(embed=embed)
+            return
+    
+        category = aliases.get(category, category)
+        if category in current_map:
+            data = current_map[category]
+            embed = discord.Embed(
+                title=data["title"],
+                description=data["desc"],
+                color=data["color"]
+            )
+            for cmd, desc in data["commands"].items():
+                embed.add_field(name=cmd, value=desc, inline=False)
+            embed.set_footer(text=data.get("footer", "SnipingSociety | Stay sharp, stay profitable ⚡"))
+            return
 
 ######### ADMIN SHIT ###########
 
