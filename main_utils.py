@@ -69,7 +69,7 @@ def setup_commands(bot):
             print("[DEBUG] Your roles:", [role.name for role in ctx.author.roles])
             if any(role in user_roles for role in admin_roles):
                 embed = discord.Embed(
-                    title="🛰️ SnipingSociety Admin 😈",
+                    title="😈 SnipingSociety Admin Prompt 😈",
                     description="Precision builds power. Watch everything.",
                     color=discord.Color(0x000000)
                 )
