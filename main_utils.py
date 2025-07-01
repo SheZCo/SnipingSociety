@@ -70,7 +70,7 @@ def setup_commands(bot):
             if any(role in user_roles for role in admin_roles):
                 embed = discord.Embed(
                     title="😈 SnipingSociety Admin Prompt 😈",
-                    description=" ",
+                    description="\n",
                     color=discord.Color(0x000000)
                 )
                 embed.add_field(name="⚽ .kick", value="Kick a user from the server.")
@@ -200,10 +200,10 @@ def setup_commands(bot):
                 title=f"🌈 BIG SNIPES BIG SNIPES 🌈",
                 color=color
             )
-            embed.add_field(value=f"🌈 BIG MONEY BIG MONEY 🌈", inline=False)
-            embed.add_field(value=f"🌈{target.mention}🌈", inline=False)
-            embed.add_field(value=f"🌈 BIG MONEY BIG MONEY 🌈", inline=False)
-            embed.set_footer(text=f"SnipingSociety | Premium Sniper {target.display_name}")
+            embed.add_field(name=f"🌈 BIG MONEY BIG MONEY 🌈", value=f"YOU WIN", inline=False)
+            embed.add_field(name=f"🌈{target.mention}🌈", value=f"YOU WIN", inline=False)
+            embed.add_field(name=f"🌈 BIG MONEY BIG MONEY 🌈", value=f"YOU WIN", inline=False)
+            embed.set_footer(text=f"SnipingSociety | Premium Sniper | {target.display_name}")
             await ctx.send(embed=embed)
             await asyncio.sleep(0.5)
     @rainbowwins.error
