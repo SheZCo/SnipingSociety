@@ -92,8 +92,8 @@ class MainUtils(commands.Cog):
                 "desc": "Server management and alpha injection.",
                 "color": discord.Color(0x000000),
                 "commands": {
-                    "⚽ .kick @user reason": "Kick a user from the server.",
-                    "🛡️ .ban @user reason length": "Ban a user from the server.",
+                    "⚽ kick @user reason": "Kick a user from the server.",
+                    "🛡️ ban @user reason length": "Ban a user from the server.",
                     "🧠 injectalpha @user": "Upload sniper alpha into a user.",
                     "👔 coffeebreak": "Take a coffebreak when things get too much",
                     "🧹 sweep...": "Delete recent messages.",
