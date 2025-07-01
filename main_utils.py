@@ -112,15 +112,16 @@ class MainUtils(commands.Cog):
                 "footer": "SnipingSociety | Stock Sniping Set"
             },
             "casino": {
-                "title": "🎲 Casino & Games 🍒",
+                "title": "🎲 Admin Casino & Games 🍒",
                 "desc": "Test your luck or flex your bankroll.",
                 "color": colorb,
                 "commands": {
                     "🆕 start casino": "Create your casino account.",
                     "💰 balance": "View your coin balance.",
+                    "💲 addmoney {user} {amount}": "put money in someones pocket",
                     "📤 send {user} {amount}": "Send coins to another user.",
                     "🎰 slots {amount} [match]": "Spin the slots with optional match requirement.",
-                    "🪙 coinflip {amount}": "Flip for 2x or lose it all."
+                    "🪙 coinflip {amount}": "Flip for 2x or lose it all.",
                 },
                 "footer": "🎲 SnipingSociety | Casino & Games | Play smart, win big! 🎰"
             },
@@ -314,7 +315,7 @@ class MainUtils(commands.Cog):
         avg_balance = total_coins / total_players if total_players else 0
 
         embed = discord.Embed(
-            title="🎲 Casino Analytics Dashboard",
+            title="🎲 Admin Casino Analytics Dashboard",
             description=f"Admin overview of casino economy & player stats.",
             color=discord.Color(0x000000)
         )
