@@ -162,7 +162,7 @@ def setup_commands(bot):
     @is_admin()
     async def sweep(ctx, amount: int=10):
         await ctx.channel.purge(limit=amount)
-        confirmation = await ctx.send(f"🧹 Let's forget about that...\n 🤔")
+        confirmation = await ctx.send(f"🧹 Let's forget about that... 🤔")
 
     @bot.command(name="purge")
     @is_admin()
@@ -200,9 +200,9 @@ def setup_commands(bot):
                 title=f"🌈 BIG SNIPES BIG SNIPES 🌈",
                 color=color
             )
-            embed.add_field(name=f"🌈 BIG MONEY BIG MONEY 🌈", inline=False)
-            embed.add_field(name=f"🌈{target.mention}🌈", inline=False)
-            embed.add_field(name=f"🌈 BIG MONEY BIG MONEY 🌈", inline=False)
+            embed.add_field(value=f"🌈 BIG MONEY BIG MONEY 🌈", inline=False)
+            embed.add_field(value=f"🌈{target.mention}🌈", inline=False)
+            embed.add_field(value=f"🌈 BIG MONEY BIG MONEY 🌈", inline=False)
             embed.set_footer(text=f"SnipingSociety | Premium Sniper {target.display_name}")
             await ctx.send(embed=embed)
             await asyncio.sleep(0.5)
