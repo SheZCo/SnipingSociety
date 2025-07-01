@@ -73,7 +73,7 @@ def setup_commands(bot):
                     description="Precision builds power. Watch everything.",
                     color=discord.Color(0x000000)
                 )
-                embed.add_field(name="⚽ .kick", value="Kick a user from the server.", inline=False)
+                embed.add_field(name="⚽ .kick", value="Kick a user from the server.")
                 embed.add_field(name="🛡️ .ban", value="Ban a user from the server.")
                 embed.add_field(name="🌈 RAINBOW WINS", value="Some colorful alpha.")
                 embed.add_field(name="🧹 Sweep...", value="Cleans the mess, deletes last 10 messages, or use purge")
