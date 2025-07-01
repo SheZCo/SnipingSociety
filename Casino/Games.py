@@ -93,6 +93,7 @@ class CasinoGames(commands.Cog):
             current_balance = Bank.get_balance(user_id)
             new_balance = current_balance + winnings
             Bank.set_balance(user_id, new_balance)
+            Bank.set_win_count(user_id, Bank.get_win_count(user_id) + 1)
             Bank.set_loss_count(user_id, 0)
 
             color = discord.Color(0x00FFFF)
@@ -147,6 +148,7 @@ class CasinoGames(commands.Cog):
         if win:
             winnings = amount * 2
             Bank.set_balance(user_id, Bank.get_balance(user_id) + winnings)
+            Bank.set_win_count(user_id, Bank.get_win_count(user_id) + 1)
             outcome = f"✅ It's **{result.upper()}**! You won **{winnings} coins**!"
             color = discord.Color.green()
         else:
