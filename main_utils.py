@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from discord.ext import commands
-from casino import Bank
+from Casino import Bank
 import discord
 import aiohttp
 import asyncio
