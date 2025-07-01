@@ -29,7 +29,7 @@ def save_balances(balances):
 def get_balance(user_id, amount):
     balances = load_balances()
     balances[str(user_id)] = amount
-    save_balances(balances)
+    return balances.get(str(user_id), 0)
 
 def set_balance(user_id, amount):
     balances = load_balances()
@@ -75,6 +75,7 @@ class CasinoBalance(commands.Cog):
             sender_bal = get_balance(ctx.author.id)
             if sender_bal < amount:
                 await ctx.send(f"❌ You don’t have enough coins. Your balance is: {sender_bal}")
+                return
             
             receiver_bal = get_balance(member.id)
             set_balance(ctx.author.id, sender_bal - amount)
@@ -87,5 +88,10 @@ class CasinoBalance(commands.Cog):
             if amount <= 0:
                 await ctx.send("❌ Amount must be positive.")
                 return
+            
+            bal = get_balance(member.id)
+            set_balance(member.id, bal + amount)
+            await ctx.send(f"✅ Added {amount} coins to {member.mention}'s balance.")
+
 async def setup(bot):
     await bot.add_cog(CasinoBalance(bot))

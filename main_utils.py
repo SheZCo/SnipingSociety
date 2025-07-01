@@ -116,7 +116,7 @@ class MainUtils(commands.Cog):
                 embed.add_field(name=f"{cmd}", value=desc, inline=False)
 
             embed.set_footer(text=data.get("footer", "SnipingSociety | Stay sharp, stay profitable ⚡"))
-            await ctx.send(embed=emembedbed)
+            await ctx.send(embed=embed)
         else:
              # Category not found, send a friendly message or fallback help
             await ctx.send(f"❌ Unknown help category: `{category}`. Try `.help` to see available categories.")
