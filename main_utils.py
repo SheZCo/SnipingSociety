@@ -16,7 +16,7 @@ def has_roles(*role_names):
     return commands.check(predicate)
 
 def is_admin():
-    admin_roles=["Owner", "The Boys"] 
+    admin_roles=['Owner', 'The Boys'] 
     return has_roles(*admin_roles)
 
 
@@ -64,7 +64,7 @@ def setup_commands(bot):
             await ctx.send(embed=embed)
 
         elif topic.lower() == "admin":
-            admin_roles = ["Owner", "The Boys"]
+            admin_roles = ['Owner', 'The Boys']
             user_roles = [role.name for role in ctx.author.roles]
             print("[DEBUG] Your roles:", [role.name for role in ctx.author.roles])
             if any(role in user_roles for role in admin_roles):
