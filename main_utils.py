@@ -173,7 +173,6 @@ class MainUtils(commands.Cog):
             data = base_help_map.get(category)
 
         if data:
-            data = current_map[category]
             embed = discord.Embed(
                 title=data["title"],
                 description=data["desc"],
