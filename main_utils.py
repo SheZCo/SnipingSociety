@@ -163,18 +163,18 @@ class MainUtils(commands.Cog):
             await ctx.send(embed=embed)
             return
     
-        category = aliases.get(category, category)
-        if category in current_map:
-            data = current_map[category]
-            embed = discord.Embed(
-                title=data["title"],
-                description=data["desc"],
-                color=data["color"]
-            )
-            for cmd, desc in data["commands"].items():
-                embed.add_field(name=cmd, value=desc, inline=False)
-            embed.set_footer(text=data.get("footer", "SnipingSociety | Stay sharp, stay profitable ⚡"))
-            return
+            category = aliases.get(category, category)
+            if category in current_map:
+                data = current_map[category]
+                embed = discord.Embed(
+                    title=data["title"],
+                    description=data["desc"],
+                    color=data["color"]
+                )
+                for cmd, desc in data["commands"].items():
+                    embed.add_field(name=cmd, value=desc, inline=False)
+                embed.set_footer(text=data.get("footer", "SnipingSociety | Stay sharp, stay profitable ⚡"))
+                return
 
 ######### ADMIN SHIT ###########
 
