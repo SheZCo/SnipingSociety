@@ -87,5 +87,5 @@ class CasinoBalance(commands.Cog):
             if amount <= 0:
                 await ctx.send("❌ Amount must be positive.")
                 return
-def setup(bot):
-    bot.add_cog(CasinoBalance(bot))
+async def setup(bot):
+    await bot.add_cog(CasinoBalance(bot))

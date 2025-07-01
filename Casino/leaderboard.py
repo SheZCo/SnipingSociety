@@ -37,6 +37,6 @@ class CasinoLeaderboard(commands.Cog):
             embed.set_footer(text="🤑 SnipingSociety | Flex harder. 🤑")
             await ctx.send(embed=embed)
 
-def setup(bot):
-    bot.add_cog(CasinoLeaderboard(bot))
+async def setup(bot):
+    await bot.add_cog(CasinoLeaderboard(bot))
 

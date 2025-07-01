@@ -97,7 +97,7 @@ class CasinoGames(commands.Cog):
 
 
 
-def setup(bot):
-    bot.add_cog(CasinoGames(bot))
+async def setup(bot):
+    await bot.add_cog(CasinoGames(bot))
 
 
