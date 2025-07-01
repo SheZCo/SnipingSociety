@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from discord.ext import commands
+from casino import Bank
 import discord
 import aiohttp
 import asyncio
@@ -7,7 +8,6 @@ import random
 import re
 import os
 
-bot = commands.Bot(command_prefix='.', intents=discord.Intents.all())
 
 def has_roles(*role_names):
     async def predicate(ctx):
@@ -20,13 +20,15 @@ def is_admin():
     return has_roles(*admin_roles)
 
 
-def setup_commands(bot):
-    @bot.command(name="help")
-    async def help(ctx, topic: str = None):
-        user_roles = [role.name for role in ctx.author.roles]
-        admin_roles = ["Owner", "The Boys"]
-        
-        if topic is None:
+class MainUtils(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.command(name="help")
+    async def help(self, ctx, category: str = None, command: str = None):
+        category = category.lower() if category else None
+        command = command.lower() if command else None
+        if category is None:
             embed = discord.Embed(
                 title="🛡️ SnipingSociety Bot Help",
                 description="Type `.help [category]` to view commands in that area.",
@@ -34,60 +36,96 @@ def setup_commands(bot):
             )
             embed.add_field(name="📈 .help stocks", value="Commands for sniping stocks/options.", inline=False)
             embed.add_field(name="💰 .help crypto", value="Crypto, sniping, flipping tools.", inline=False)
-            embed.add_field(name="😎 .help fun", value="Crypto, sniping, flipping tools.", inline=False)
+            embed.add_field(name="🎲 .help casino", value="Casino games & coin tracking.", inline=False)
+            embed.add_field(name="😈 .help admin", value="Bot admin & utility commands.", inline=False)
             embed.set_footer(text="SnipingSociety | Stay sharp, stay profitable ⚡")
             await ctx.send(embed=embed)
+            return
+        
+        aliases = {
+            "stock": "stocks",
+            "stocks": "stocks",
+            "crypto": "crypto",
+            "casino": "casino",
+            "games": "casino",  # games maps to casino help
+            "admin": "admin",
+            "fun": "casino",    # if you want fun to map to casino as well
+        }
 
-        elif topic.lower() == "stocks":
+        help_map = {
+            "stocks": {
+                "title": "📈 Stock Sniping Commands",
+                "desc": "Commands related to stocks, options, and market analysis.",
+                "color": discord.Color.blue(),
+                "commands": {
+                    "🔎 stock [ticker]": "Get live stock data.",
+                    "📰 news [ticker]": "Recent news headlines.",
+                    "📊 chart [ticker]": "Snapshot chart of stock price."
+                },
+                "footer": "SnipingSociety | Stock Sniping Set"
+            },
+            "crypto": {
+                "title": "💰 Crypto Sniper Commands",
+                "desc": "Catch pumpers, avoid rugs, and flip fast.",
+                "color": discord.Color.orange(),
+                "commands": {
+                    "🔫 snipe dex {ca}": "Fetch token info from Dexscreener.",
+                    "💎 trending": "Trending tokens and sniper plays (future)."
+                },
+                "footer": "SnipingSociety | Crypto Command Set"
+            },
+            "casino": {
+                "title": "🎲 Casino & Games 🍒",
+                "desc": "Test your luck or flex your bankroll.",
+                "color": discord.Color.gold(),
+                "commands": {
+                    "start casino": "Create your casino account.",
+                    "balance": "View your coin balance.",
+                    "send {user} {amount}": "Send coins to another user.",
+                    "slots {amount} [match]": "Spin the slots with optional match requirement.",
+                    "coinflip {amount}": "Flip for 2x or lose it all."
+                },
+                "footer": "🎲 SnipingSociety | Casino & Games | Play smart, win big! 🎰"
+            },
+            "admin": {
+                "title": "😈 SnipingSociety Admin Prompt 😈",
+                "desc": "Server management and alpha injection.",
+                "color": discord.Color(0x000000),
+                "commands": {
+                    "⚽ .kick @user reason": "Kick a user from the server.",
+                    "🛡️ .ban @user reason length": "Ban a user from the server.",
+                    "🧠 injectalpha @user": "Upload sniper alpha into a user.",
+                    "👔 coffeebreak": "Take a coffebreak when things get too much",
+                    "🧹 sweep...": "Delete recent messages.",
+                    "🌈 rainbow @user": "Rainbow spam for wins.",
+                    "💨 purge [amount]": "Bulk delete messages.",
+                },
+                "footer": "⛓️ SnipingSociety | Powered by @Sleutime | Precision builds power. Watch everything. ⛓️"
+            }
+        }
+
+        if category in help_map:
+            data = help_map[category]
             embed = discord.Embed(
-                title="📈 Stock Sniping Commands",
-                description="Commands related to stocks, options, and market analysis.",
-                color=discord.Color.blue()
+                title=data["title"],
+                description=data["desc"],
+                color=data["color"]
             )
-            embed.add_field(name="🔎 .stock {ticker}", value="Get live stock data.", inline=False)
-            embed.add_field(name="📰 .news {ticker}", value="Recent news headlines.", inline=False)
-            embed.add_field(name="📊 .chart {ticker}", value="Snapshot chart of stock price.", inline=False)
-            embed.add_field(name="💡 More coming soon!", value="More tools on the way.", inline=False)
-            embed.set_footer(text="SnipingSociety | Stock Sniping Set")
+
+            for cmd, desc in data["commands"].items():
+                embed.add_field(name=f"[cmd]", value=desc, inline=False)
+
+            embed.set_footer(text=data.get("footer", "SnipingSociety | Stay sharp, stay profitable ⚡"))
             await ctx.send(embed=embed)
+        else:
+             # Category not found, send a friendly message or fallback help
+            await ctx.send(f"❌ Unknown help category: `{category}`. Try `.help` to see available categories.")
+        
+######### ADMIN SHIT ###########
 
-        elif topic.lower() == "crypto":
-            embed = discord.Embed(
-                title="💰 Crypto Sniper Commands",
-                description="Catch pumpers, avoid rugs, and flip fast.",
-                color=discord.Color.gold()
-            )
-            embed.add_field(name="🔫 .snipe dex {ca}", value="Fetch token info from Dexscreener.", inline=False)
-            embed.add_field(name="💎 .gems", value="Trending tokens and sniper plays (future).", inline=False)
-            embed.add_field(name="💡 More coming soon!", value="More sniper tools soon.", inline=False)
-            embed.set_footer(text="SnipingSociety | Crypto Command Set")
-            await ctx.send(embed=embed)
-
-        elif topic.lower() == "admin":
-            admin_roles = ['Owner', 'The Boys']
-            user_roles = [role.name for role in ctx.author.roles]
-            print("[DEBUG] Your roles:", [role.name for role in ctx.author.roles])
-            if any(role in user_roles for role in admin_roles):
-                embed = discord.Embed(
-                    title="😈 SnipingSociety Admin Prompt 😈",
-                    description="\n",
-                    color=discord.Color(0x000000)
-                )
-                embed.add_field(name="⚽ .kick", value="Kick a user from the server.")
-                embed.add_field(name="🛡️ .ban", value="Ban a user from the server.")
-                embed.add_field(name="🌈 RAINBOW WINS", value="Some colorful alpha.")
-                embed.add_field(name="🧹 Sweep...", value="Cleans the mess, deletes last 10 messages, or use purge")
-                embed.add_field(name="🧠 Inject Alpha", value="Injects top-tier sniper wisdom directly into your brain.")
-                embed.add_field(name="👔 Coffee Break", value="Posts a chill gif and says youll be back")
-                embed.set_footer(text="⛓️ SnipingSociety | Powered by @Sleutime ⛓️ Precision builds power. Watch everything.")  
-                await ctx.send(embed=embed)   
-
-
-
-######### ADMIN SHIT ######
-    @bot.command(name="injectalpha")
+    @commands.command(name="injectalpha")
     @is_admin()
-    async def InjectAlpha(ctx):
+    async def InjectAlpha(self, ctx):
 
         if not ctx.message.mentions:
             await ctx.send("❌ Tag someone to inject alpha into. Example: `.injectalpha @user`")
@@ -105,14 +143,14 @@ def setup_commands(bot):
         await ctx.send(random.choice(alpha_quotes))
 
     @InjectAlpha.error
-    async def InjectAlpha_error(ctx, error):
+    async def InjectAlpha_error(self, ctx, error):
         if isinstance(error, commands.CkeckFailure):
             await ctx.send("🚫 You don’t have the clearance to inject alpha.")
 
-###########################################
-    @bot.command(name="coffeebreak")
+
+    @commands.command(name="coffeebreak")
     @is_admin()
-    async def coffeebreak(ctx):
+    async def coffeebreak(self, ctx):
         coffee_quotes = [
             "☕ Taking a break from the rugs. Be back when liquidity looks safer.",
             "🧘‍♂️ Admin is meditating on the next 100x. Do not disturb.",
@@ -152,21 +190,15 @@ def setup_commands(bot):
         embed.set_footer(text=f"😈 SnipingSociety 📈 | {footing}")
         await ctx.send(embed=embed)
 
-    @coffeebreak.error
-    async def Coffee_error(ctx, error):
-        if isinstance(error, commands.CkeckFailure):
-            await ctx.send(f"🚫 You don't need any more coffee...")
-#########################
-
-    @bot.command(name="sweep")
+    @commands.command(name="sweep")
     @is_admin()
-    async def sweep(ctx, amount: int=10):
+    async def sweep(self, ctx, amount: int=10):
         await ctx.channel.purge(limit=amount)
         confirmation = await ctx.send(f"🧹 Let's forget about that... 🤔")
 
-    @bot.command(name="purge")
+    @commands.command(name="purge")
     @is_admin()
-    async def purge(ctx, amount: int):
+    async def purge(self, ctx, amount: int):
         if amount is None:
             await ctx.send(f"🧹 Example usage '.purge 1-100'")
             return
@@ -174,11 +206,11 @@ def setup_commands(bot):
         deleted = await ctx.channel.purge(limit=amount + 1)
         confirmation = await ctx.send(f"🧹 Deleted {len(deleted) - 1} messages.")
         await confirmation.delete(delay=3)  # Remove confirmation after 3 seconds
-######################################
 
-    @bot.command(name="rainbow")
+
+    @commands.command(name="rainbow")
     @is_admin()
-    async def rainbowwins(ctx, target: discord.Member):
+    async def rainbowwins(self, ctx, target: discord.Member):
         RAINBOW_COLORS = [
             0xFF0000,  # Red
             0xFF7F00,  # Orange
@@ -206,6 +238,9 @@ def setup_commands(bot):
             await ctx.send(embed=embed)
             await asyncio.sleep(0.5)
     @rainbowwins.error
-    async def rainbowerror(ctx,error):
-        if isinstance(error, commands.CkeckFailure):
+    async def rainbowerror(self, ctx,error):
+        if isinstance(error, commands.CheckFailure):
             await ctx.send(f"🌈 Not FOR YOU 🌈")
+
+def setup(bot):
+    bot.add_cog(MainUtils(bot))

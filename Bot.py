@@ -2,6 +2,7 @@
 
 from dotenv import load_dotenv
 from discord.ext import commands
+from casino import Bank
 import stock_utils
 import main_utils
 import discord
@@ -10,15 +11,21 @@ from colorama import init, Fore, Style
 import re
 import os
 
+#Extensions/Games/Shit
+import Casino.Games
+import Casino.Bank
+
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='.', intents=discord.Intents.all())
 bot.remove_command('help')
 
 try:
-    main_utils.setup_commands(bot)
+    bot.load_extension("main_utils")
+    bot.load_extension("Casino.Bank")
+    bot.load_extension("Casino.Games")
 except Exception as e:
-    print(f"{e}")
+    print(f"Failed to load: {e}")
 
 
 @bot.command(name="stock")
