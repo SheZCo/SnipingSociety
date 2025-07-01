@@ -26,9 +26,8 @@ def save_balances(balances):
     with open(BALANCE_FILE, "w") as f:
         json.dump(balances, f, indent=4)
 
-def get_balance(user_id, amount):
+def get_balance(user_id):
     balances = load_balances()
-    balances[str(user_id)] = amount
     return balances.get(str(user_id), 0)
 
 def set_balance(user_id, amount):
@@ -63,6 +62,9 @@ class CasinoBalance(commands.Cog):
 
     @commands.command()
     async def balance(self, ctx):
+        if not has_account(ctx.author.id):
+            await ctx.send(f"❌ {ctx.author.mention}, you don't have a casino account yet. Use `.start casino` to create one.")
+            return
         bal = get_balance(ctx.author.id)
         await ctx.send(f"💰 {ctx.author.mention}, your balance is **{bal} coins**.")
 
