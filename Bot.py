@@ -29,7 +29,7 @@ async def Stockprice(ctx, ticker: str):
     else:
         await ctx.send(f"❌ Sorry! We're experiencing Issues right now!")
 
-print(Fore.RED + f'🧠 Starting bot...')
+print(f'🧠 Starting bot...')
 
 @bot.event
 async def on_ready():
