@@ -107,7 +107,7 @@ def setup_commands(bot):
 
 ###########################################
     @bot.command(name="coffebreak")
-    @is_admin
+    @is_admin()
     async def coffebreak(ctx):
         coffee_quotes = [
             "☕ Taking a break from the rugs. Be back when liquidity looks safer.",
@@ -155,13 +155,13 @@ def setup_commands(bot):
 #########################
 
     @bot.command(name="sweep")
-    @is_admin
+    @is_admin()
     async def sweep(ctx, amount: int=10):
         await ctx.channel.purge(limit=amount)
         confirmation = await ctx.send(f"🧹 Let's forget about that...\n 🤔")
 
     @bot.command(name="purge")
-    @is_admin
+    @is_admin()
     async def purge(ctx, amount: int):
         if amount is None:
             await ctx.send(f"🧹 Example usage '.purge 1-100'")
@@ -173,7 +173,7 @@ def setup_commands(bot):
 ######################################
 
     @bot.command(name="rainbow")
-    @is_admin
+    @is_admin()
     async def rainbowwins(ctx, target: discord.Member):
         RAINBOW_COLORS = [
             0xFF0000,  # Red
