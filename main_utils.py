@@ -198,10 +198,9 @@ def setup_commands(bot):
         for i, color in enumerate(RAINBOW_COLORS, start=1):
             embed = discord.Embed(
                 title=f"🌈 BIG SNIPES BIG SNIPES 🌈",
+                description=f"🔥 {target.mention} is the chosen sniper!",
                 color=color
             )
-            embed.add_field(name=f"🌈 BIG MONEY BIG MONEY 🌈", value=f"YOU WIN", inline=False)
-            embed.add_field(name=f"🌈{target.mention}🌈", value=f"YOU WIN", inline=False)
             embed.add_field(name=f"🌈 BIG MONEY BIG MONEY 🌈", value=f"YOU WIN", inline=False)
             embed.set_footer(text=f"SnipingSociety | Premium Sniper | {target.display_name}")
             await ctx.send(embed=embed)
