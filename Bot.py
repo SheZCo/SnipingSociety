@@ -30,10 +30,10 @@ async def Stockprice(ctx, ticker: str):
         await ctx.send(f"❌ Sorry! We're experiencing Issues right now!")
 
 print(Fore.RED + f'🧠 Starting bot...')
+
 @bot.event
 async def on_ready():
-
-print(colorama.fore.GREEN + f'🚀 SnipingSociety Bot is live as {bot.user.name}\n' + Style.RESET_ALL)
-print(f'FINN API KEY: ' + colorama.Fore.CYAN + os.getenv("FINN_API") + colorama.STYLE.RESET_ALL)
+    print(f'🚀 SnipingSociety Bot is live as {bot.user.name}\n')
+    print(f'FINN API KEY: ' + colorama.Fore.CYAN + os.getenv("FINN_API"))
 
 bot.run(TOKEN)
