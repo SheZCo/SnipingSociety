@@ -25,7 +25,7 @@ except Exception as e:
 async def Stockprice(ctx, ticker: str):
     SP = await stock_utils.fetch_stock_price(ticker.upper())
     if SP: 
-        await ctx.send(embed)
+        await ctx.send(SP)
     else:
         await ctx.send(f"❌ Sorry! We're experiencing Issues right now!")
 
