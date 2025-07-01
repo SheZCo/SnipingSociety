@@ -2,7 +2,7 @@
 
 from dotenv import load_dotenv
 from discord.ext import commands
-from casino import Bank
+from Casino import Bank
 import stock_utils
 import main_utils
 import discord
@@ -24,6 +24,7 @@ try:
     bot.load_extension("main_utils")
     bot.load_extension("Casino.Bank")
     bot.load_extension("Casino.Games")
+    bot.load_extension("Casino.leaderboard")
 except Exception as e:
     print(f"Failed to load: {e}")
 
