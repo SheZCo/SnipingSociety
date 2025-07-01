@@ -38,8 +38,12 @@ class CasinoLeaderboard(commands.Cog):
         for i, (user_id, info) in enumerate(top_balances[:5], start=1):
             user = await self.bot.fetch_user(int(user_id))
             balance = info.get("balance", 0)
-            embed.add_field(name=f"#{i} - {user.name}", value=f"💰 {balance} coins", inline=False)
-
+            wins = info.get("wins", 0)
+            embed.add_field(
+                name=f"#{i} - {user.name}",
+                value=f"💰 {balance} coins\n🏅 {wins} wins",  # <-- Added wins display
+                inline=False
+            )
         embed.set_footer(text="🤑 SnipingSociety | Flex harder. 🤑")
         await ctx.send(embed=embed)
 

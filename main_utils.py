@@ -310,6 +310,7 @@ class MainUtils(commands.Cog):
         
         total_coins = sum(user.get("balance", 0) for user in data.values())
         total_losses = sum(user.get("losses", 0) for user in data.values())
+        total_wins = sum(user.get("wins", 0) for user in data.values())
         avg_balance = total_coins / total_players if total_players else 0
 
         embed = discord.Embed(
@@ -321,6 +322,7 @@ class MainUtils(commands.Cog):
         embed.add_field(name="💰 Total Coins in Circulation", value=f"{total_coins:,}", inline=True)
         embed.add_field(name="📊 Average Player Balance", value=f"{avg_balance:,.2f}", inline=True)
         embed.add_field(name="📉 Total Losses Recorded", value=str(total_losses), inline=True)
+        embed.add_field(name="🏅 Total Wins Recorded", value=str(total_wins), inline=True)  # <-- Added field for wins
         embed.set_footer(text="🎲 SnipingSociety | Casino Analytics")
         await ctx.send(embed=embed)
 

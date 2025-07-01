@@ -33,8 +33,8 @@ class CasinoGames(commands.Cog):
         
         
         #Deduct Bet
-        old_balance = balance
-        Bank.set_balance(user_id, balance - amount)
+        old_balance = Bank.get_balance(user_id)
+        Bank.set_balance(user_id, old_balance - amount)
 
         base_weights = {
             "🍒": 10,
@@ -65,7 +65,7 @@ class CasinoGames(commands.Cog):
                if row == win_row:
                    grid.append([win_symbol] * match_count)
                else: 
-                     grid.append([random.choice(weighted_symbols) for _ in range(match_count)])
+                    grid.append([random.choice(weighted_symbols) for _ in range(match_count)])
                   
         else:
             grid = [[random.choice(weighted_symbols) for _ in range(match_count)] for _ in range(3)]
@@ -89,9 +89,12 @@ class CasinoGames(commands.Cog):
         # 💰 Payout logic
         payout_multiplier = {2: 2, 3: 5, 4: 10}
         if max_matches >= match_count:
-            winnings = amount * payout_multiplier[match_count]
-            Bank.set_balance(user_id, Bank.get_balance(user_id) + winnings)
+            winnings = amount * payout_multiplier.get(match_count, 0)
+            current_balance = Bank.get_balance(user_id)
+            new_balance = current_balance + winnings
+            Bank.set_balance(user_id, new_balance)
             Bank.set_loss_count(user_id, 0)
+
             color = discord.Color(0x00FFFF)
             result_text = f"🎉 Congrats! You got {max_matches} matching emojis and won {winnings} coins!"
         else:

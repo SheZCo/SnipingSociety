@@ -26,7 +26,7 @@ def get_user_data(user_id):
     data = load_data()
     user_str = str(user_id)
     if user_str not in data:
-        data[user_str] = {"balance":0, "losses": 0}
+        data[user_str] = {"balance":0, "losses": 0, "wins": 0}
         save_data(data)
     return data[user_str]
 
@@ -37,7 +37,7 @@ def set_balance(user_id, amount):
     data = load_data()
     user_str = str(user_id)
     if user_str not in data:
-        data[user_str] = {"balance": 0, "losses": 0}
+        data[user_str] = {"balance": 0, "losses": 0, "wins": 0}
     else:
         data[user_str]["balance"] = amount
     save_data(data)
@@ -49,9 +49,22 @@ def set_loss_count(user_id, count):
     data = load_data()
     user_str = str(user_id)
     if user_id not in data:
-        data[user_str] = {"balance": 0, "losses": count}
+        data[user_str] = {"balance": 0, "losses": count, "wins": 0}
     else:
         data[user_str]["losses"] = count
+    save_data(data)
+
+def get_win_count(user_id):
+    user_data = get_user_data(user_id)
+    return user_data.get("wins", 0)
+
+def set_win_count(user_id, count):
+    data = load_data()
+    user_str = str(user_id)
+    if user_str not in data:
+        data[user_str] = {"balance": 0, "losses": 0, "wins": count}
+    else:
+        data[user_str]["wins"] = count
     save_data(data)
 
 def has_account(user_id):
@@ -84,6 +97,7 @@ class CasinoBalance(commands.Cog):
             ##ELSE
             set_balance(user_id, INITIAL_BALANCE)
             set_loss_count(user_id, 0)
+            set_win_count(user_id, 0)
             await ctx.send(f"🎉 {ctx.author.mention}, your casino account is ready! You received {INITIAL_BALANCE} coins.")
         else: 
             await ctx.send("❌ Unknown start option. Try `.start casino`")
@@ -93,6 +107,7 @@ class CasinoBalance(commands.Cog):
             await ctx.send(f"❌ {ctx.author.mention}, you don't have a casino account yet. Use `.start casino` to create one.")
             return
         bal = get_balance(ctx.author.id)
+        wins = get_win_count(ctx.author.id)
         await ctx.send(f"💰 {ctx.author.mention}, your balance is **{bal} coins**.")
 
     @commands.command()
