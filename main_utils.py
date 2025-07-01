@@ -66,6 +66,7 @@ def setup_commands(bot):
         elif topic.lower() == "admin":
             admin_roles = ["Owner", "The Boys"]
             user_roles = [role.name for role in ctx.author.roles]
+            print("[DEBUG] Your roles:", [role.name for role in ctx.author.roles])
             if any(role in user_roles for role in admin_roles):
                 embed = discord.Embed(
                     title="🛰️ SnipingSociety Admin 😈",
