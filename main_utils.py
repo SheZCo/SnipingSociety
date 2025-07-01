@@ -138,6 +138,27 @@ class MainUtils(commands.Cog):
             **base_help_map
         }
 
+
+        current_map = admin_help_map if is_user_admin else base_help_map
+        # Category name w/ aliases
+        category = aliases.get(category, category)
+
+        if is_user_admin and category in admin_help_map:
+            data = admin_help_map.get(category)
+        else:
+            data = base_help_map.get(category)
+
+        if data:
+            embed = discord.Embed(
+                title=data["title"],
+                description=data["desc"],
+                color=data["color"]
+            )
+            for cmd, desc in data["commands"].items():
+                embed.add_field(name=cmd, value=desc, inline=False)
+            embed.set_footer(text=data.get("footer", "SnipingSociety | Stay sharp, stay profitable ⚡"))
+            await ctx.send(embed=embed)
+
         if category is None:
             if is_user_admin:
                 embed = discord.Embed(
@@ -163,25 +184,7 @@ class MainUtils(commands.Cog):
             await ctx.send(embed=embed)
             return
         
-        current_map = admin_help_map if is_user_admin else base_help_map
-        # Category name w/ aliases
-        category = aliases.get(category, category)
-
-        if is_user_admin and category in admin_help_map:
-            data = admin_help_map.get(category)
-        else:
-            data = base_help_map.get(category)
-
-        if data:
-            embed = discord.Embed(
-                title=data["title"],
-                description=data["desc"],
-                color=data["color"]
-            )
-            for cmd, desc in data["commands"].items():
-                embed.add_field(name=cmd, value=desc, inline=False)
-            embed.set_footer(text=data.get("footer", "SnipingSociety | Stay sharp, stay profitable ⚡"))
-            await ctx.send(embed=embed)
+        
             
 
 ######### ADMIN SHIT ###########
