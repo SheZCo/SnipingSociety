@@ -64,7 +64,7 @@ def setup_commands(bot):
             await ctx.send(embed=embed)
 
         elif topic.lower() == "admin":
-            if any(role in user_roles for role in admin_roles):
+            if await is_admin().predicate(ctx):
                 embed = discord.Embed(
                     title="🛰️ SnipingSociety Admin 😈",
                     description="Precision builds power. Watch everything.",
