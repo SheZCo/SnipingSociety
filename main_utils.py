@@ -73,7 +73,9 @@ def setup_commands(bot):
                     description="Precision builds power. Watch everything.",
                     color=discord.Color(0x000000)
                 )
-                embed.add_field(name="🌈 RAINBOW WINS", value="Some colorful alpha.", inline=False)
+                embed.add_field(name="⚽ .kick", value="Kick a user from the server.", inline=False)
+                embed.add_field(name="🛡️ .ban", value="Ban a user from the server.")
+                embed.add_field(name="🌈 RAINBOW WINS", value="Some colorful alpha.")
                 embed.add_field(name="🧹 Sweep...", value="Cleans the mess, deletes last 10 messages, or use purge")
                 embed.add_field(name="🧠 Inject Alpha", value="Injects top-tier sniper wisdom directly into your brain.")
                 embed.add_field(name="👔 Coffee Break", value="Posts a chill gif and says youll be back")
