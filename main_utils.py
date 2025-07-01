@@ -242,5 +242,5 @@ class MainUtils(commands.Cog):
         if isinstance(error, commands.CheckFailure):
             await ctx.send(f"🌈 Not FOR YOU 🌈")
 
-def setup(bot):
-    bot.add_cog(MainUtils(bot))
+async def setup(bot):
+    await bot.add_cog(MainUtils(bot))
